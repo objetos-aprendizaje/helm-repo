@@ -42,6 +42,49 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+          env:
+            - name: APP_ENV
+              value: local
+            - name: APP_DEBUG
+              value: "true"
+
+            - name: APP_NAME
+              value: "WEB_PORTAL"
+            - name: APP_KEY
+              value: "{{ .Values.web.appKey }}"
+            - name: SESSION_LIFETIME
+              value: "{{ .Values.web.sessionLifetime }}"
+            - name: COLOR_PRIMARY
+              value: "{{ .Values.web.colorPrimary }}"
+            - name: COLOR_SECONDARY
+              value: "{{ .Values.web.colorSecondary }}"
+            - name: BACKEND_URL
+              value: "{{ .Values.admin.publicUrl }}"
+
+            - name: APP_URL
+              value: "{{ .Values.web.publicUrl }}"
+
+            - name: DB_HOST
+              {{- if .Values.mysql.enabled }}
+              value: {{ include "portal-objetos-aprendizaje.fullname" . }}-mysql-service
+              {{- else }}
+              value: "{{ .Values.mysql.mysqlHost }}"
+              {{- end }}
+            - name: DB_PORT
+              {{- if .Values.mysql.enabled }}
+              value: "3306"
+              {{- else }}
+              value: "{{ .Values.mysql.mysqlPort }}"
+              {{- end }}
+            - name: DB_DATABASE
+              value: "{{ .Values.mysql.mysqlDatabase }}"
+            - name: DB_USERNAME
+              value: "{{ .Values.mysql.mysqlUser }}"
+            - name: DB_PASSWORD
+              value: "{{ .Values.mysql.mysqlPassword }}"
+            - name: DB_PREFIX
+              value: "{{ .Values.mysql.mysqlTablePrefix }}"
+
           {{/*
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}

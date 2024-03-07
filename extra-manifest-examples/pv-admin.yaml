@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-portable-objetos-aprendizaje-admin-public
+spec:
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: portable-objetos-aprendizaje-admin-public
+  hostPath:
+    # TODO: Change this path to a more suitable one
+    path: /tmp/admin-public-data
+    type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-portable-objetos-aprendizaje-admin-public
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: portable-objetos-aprendizaje-admin-public
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-portable-objetos-aprendizaje-admin-protected
+spec:
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: portable-objetos-aprendizaje-admin-protected
+  hostPath:
+    # TODO: Change this path to a more suitable one
+    path: /tmp/admin-protected-data
+    type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-portable-objetos-aprendizaje-admin-protected
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: portable-objetos-aprendizaje-admin-protected
+  resources:
+    requests:
+      storage: 10Gi

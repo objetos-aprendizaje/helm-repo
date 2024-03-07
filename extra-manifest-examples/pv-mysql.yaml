@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-portable-objetos-aprendizaje-mysql
+spec:
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: portable-objetos-aprendizaje-mysql
+  hostPath:
+    # TODO: Change this path to a more suitable one
+    path: /tmp/mysql-data
+    type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-portable-objetos-aprendizaje-mysql
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: portable-objetos-aprendizaje-mysql
+  resources:
+    requests:
+      storage: 10Gi
