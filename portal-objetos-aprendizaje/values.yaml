@@ -43,6 +43,11 @@ replicaCount: 1
 
 admin:
   appKey: "base64:s2f6DZAfeRUGrnBwo/woMDP3Lp9w4ELdO0LEL537xHM="
+  sessionLifetime: "120"
+  colorPrimary: "#2C4C7E"
+  colorSecondary: "#507AB9"
+  generalErrorMessage: "Ha ocurrido un error"
+  pwresTokenExpirationMin: "60"
   image:
     tag: "latest"
     repository: ghcr.io/objetos-aprendizaje/portal-administracion
