@@ -1,0 +1,13 @@
+apiVersion: v1
+entries:
+  portal-objetos-aprendizaje:
+  - apiVersion: v2
+    created: "2024-03-07T22:18:51.731464+01:00"
+    description: Portal de Objetos de Aprendizaje
+    digest: 7699d981135cc2fe37e9239371b1bc540902fb3697768fee6ce0b50a6ddc8707
+    name: portal-objetos-aprendizaje
+    type: application
+    urls:
+    - charts/portal-objetos-aprendizaje-0.1.0.tgz
+    version: 0.1.0
+generated: "2024-03-07T22:18:51.730916+01:00"
