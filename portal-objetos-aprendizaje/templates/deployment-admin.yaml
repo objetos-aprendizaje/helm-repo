@@ -1,0 +1,115 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "portal-objetos-aprendizaje.fullname" . }}-admin
+  labels:
+    {{- include "portal-objetos-aprendizaje.labels" . | nindent 4 }}
+    {{- include "portal-objetos-aprendizaje-admin.selectorLabels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "portal-objetos-aprendizaje-admin.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "portal-objetos-aprendizaje.labels" . | nindent 8 }}
+        {{- include "portal-objetos-aprendizaje-admin.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.admin.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "portal-objetos-aprendizaje.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.admin.image.repository }}:{{ .Values.admin.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.admin.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          env:
+            - name: APP_ENV
+              value: local
+            - name: APP_DEBUG
+              value: "true"
+
+            - name: APP_KEY
+              value: "{{ .Values.admin.appKey }}"
+
+            - name: DB_HOST
+              {{- if .Values.mysql.enabled }}
+              value: {{ include "portal-objetos-aprendizaje.fullname" . }}-mysql-service
+              {{- else }}
+              value: "{{ .Values.mysql.mysqlHost }}"
+              {{- end }}
+            - name: DB_PORT
+              {{- if .Values.mysql.enabled }}
+              value: "3306"
+              {{- else }}
+              value: "{{ .Values.mysql.mysqlPort }}"
+              {{- end }}
+            - name: DB_DATABASE
+              value: "{{ .Values.mysql.mysqlDatabase }}"
+            - name: DB_USERNAME
+              value: "{{ .Values.mysql.mysqlUser }}"
+            - name: DB_PASSWORD
+              value: "{{ .Values.mysql.mysqlPassword }}"
+            - name: DB_PREFIX
+              value: "{{ .Values.mysql.mysqlTablePrefix }}"
+
+            - name: KAFKA_BROKERS
+              {{- if .Values.kafka.enabled }}
+              value: {{ include "portal-objetos-aprendizaje.fullname" . }}-kafka-service:9092
+              {{- else }}
+              value: "{{ .Values.kafka.kafkaHost }}:{{ .Values.kafka.kafkaPort }}"
+              {{- end }}
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              {{- if .Values.kafka.enabled }}
+              value: {{ include "portal-objetos-aprendizaje.fullname" . }}-kafka-service:9092
+              {{- else }}
+              value: "{{ .Values.kafka.kafkaHost }}:{{ .Values.kafka.kafkaPort }}"
+              {{- end }}
+
+          {{/*
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          */}}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,37 @@
+{{- if .Values.kafka.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "portal-objetos-aprendizaje.fullname" . }}-kafka-service
+  labels:
+    {{- include "portal-objetos-aprendizaje.labels" . | nindent 4 }}
+    {{- include "portal-objetos-aprendizaje-kafka.selectorLabels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: 9092
+      targetPort: 9092
+      protocol: TCP
+      name: kafka
+  selector:
+    {{- include "portal-objetos-aprendizaje-kafka.selectorLabels" . | nindent 4 }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "portal-objetos-aprendizaje.fullname" . }}-zookeeper-service
+  labels:
+    {{- include "portal-objetos-aprendizaje.labels" . | nindent 4 }}
+    {{- include "portal-objetos-aprendizaje-zookeeper.selectorLabels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: 2181
+      targetPort: 2181
+      protocol: TCP
+      name: zookeeper
+  selector:
+    {{- include "portal-objetos-aprendizaje-zookeeper.selectorLabels" . | nindent 4 }}
+{{- end }}

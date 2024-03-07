@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "portal-objetos-aprendizaje.fullname" . }}-web-service
+  labels:
+    {{- include "portal-objetos-aprendizaje.labels" . | nindent 4 }}
+    {{- include "portal-objetos-aprendizaje-web.selectorLabels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "portal-objetos-aprendizaje-web.selectorLabels" . | nindent 4 }}

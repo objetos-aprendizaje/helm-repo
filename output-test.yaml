@@ -1,0 +1,394 @@
+NAME: po
+LAST DEPLOYED: Thu Mar  7 18:46:50 2024
+NAMESPACE: default
+STATUS: pending-install
+REVISION: 1
+HOOKS:
+---
+# Source: portal-objetos-aprendizaje/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "po-portal-objetos-aprendizaje-test-connection"
+  labels:
+    helm.sh/chart: portal-objetos-aprendizaje-0.1.0
+    
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: portal-objetos-aprendizaje-admin
+    app.kubernetes.io/instance: po
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['po-portal-objetos-aprendizaje:80']
+  restartPolicy: Never
+MANIFEST:
+---
+# Source: portal-objetos-aprendizaje/templates/service-admin.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: po-portal-objetos-aprendizaje-admin-service
+  labels:
+    helm.sh/chart: portal-objetos-aprendizaje-0.1.0
+    
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: portal-objetos-aprendizaje-admin
+    app.kubernetes.io/instance: po
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: portal-objetos-aprendizaje-admin
+    app.kubernetes.io/instance: po
+---
+# Source: portal-objetos-aprendizaje/templates/service-kafka.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: po-portal-objetos-aprendizaje-kafka-service
+  labels:
+    helm.sh/chart: portal-objetos-aprendizaje-0.1.0
+    
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: portal-objetos-aprendizaje-kafka
+    app.kubernetes.io/instance: po
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9092
+      targetPort: 9092
+      protocol: TCP
+      name: kafka
+  selector:
+    app.kubernetes.io/name: portal-objetos-aprendizaje-kafka
+    app.kubernetes.io/instance: po
+---
+# Source: portal-objetos-aprendizaje/templates/service-kafka.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: po-portal-objetos-aprendizaje-zookeeper-service
+  labels:
+    helm.sh/chart: portal-objetos-aprendizaje-0.1.0
+    
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: portal-objetos-aprendizaje-zookeeper
+    app.kubernetes.io/instance: po
+spec:
+  type: ClusterIP
+  ports:
+    - port: 2181
+      targetPort: 2181
+      protocol: TCP
+      name: zookeeper
+  selector:
+    app.kubernetes.io/name: portal-objetos-aprendizaje-zookeeper
+    app.kubernetes.io/instance: po
+---
+# Source: portal-objetos-aprendizaje/templates/service-mysql.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: po-portal-objetos-aprendizaje-mysql-service
+  labels:
+    helm.sh/chart: portal-objetos-aprendizaje-0.1.0
+    
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: portal-objetos-aprendizaje-mysql
+    app.kubernetes.io/instance: po
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3306
+      targetPort: 3306
+      protocol: TCP
+      name: mysql
+  selector:
+    app.kubernetes.io/name: portal-objetos-aprendizaje-mysql
+    app.kubernetes.io/instance: po
+---
+# Source: portal-objetos-aprendizaje/templates/service-web.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: po-portal-objetos-aprendizaje-web-service
+  labels:
+    helm.sh/chart: portal-objetos-aprendizaje-0.1.0
+    
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: portal-objetos-aprendizaje-web
+    app.kubernetes.io/instance: po
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: portal-objetos-aprendizaje-web
+    app.kubernetes.io/instance: po
+---
+# Source: portal-objetos-aprendizaje/templates/deployment-admin.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: po-portal-objetos-aprendizaje-admin
+  labels:
+    helm.sh/chart: portal-objetos-aprendizaje-0.1.0
+    
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: portal-objetos-aprendizaje-admin
+    app.kubernetes.io/instance: po
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: portal-objetos-aprendizaje-admin
+      app.kubernetes.io/instance: po
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: portal-objetos-aprendizaje-0.1.0
+        
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: portal-objetos-aprendizaje-admin
+        app.kubernetes.io/instance: po
+    spec:
+      serviceAccountName: default
+      securityContext:
+        {}
+      containers:
+        - name: portal-objetos-aprendizaje
+          securityContext:
+            {}
+          image: "ghcr.io/objetos-aprendizaje/portal-administracion:latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: APP_ENV
+              value: local
+            - name: APP_DEBUG
+              value: "true"
+
+            - name: DB_HOST
+              value: po-portal-objetos-aprendizaje-mysql-service
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_DATABASE
+              value: "portal-objetos-aprendizaje"
+            - name: DB_USERNAME
+              value: "portal-objetos-aprendizaje"
+            - name: DB_PASSWORD
+              value: "!ChangeMe!.123!"
+            - name: DB_PREFIX
+              value: "qvkei_"
+
+          
+          resources:
+            {}
+---
+# Source: portal-objetos-aprendizaje/templates/deployment-kafka.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: po-portal-objetos-aprendizaje-kafka
+  labels:
+    helm.sh/chart: portal-objetos-aprendizaje-0.1.0
+    
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: portal-objetos-aprendizaje-kafka
+    app.kubernetes.io/instance: po
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: portal-objetos-aprendizaje-kafka
+      app.kubernetes.io/instance: po
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: portal-objetos-aprendizaje-0.1.0
+        
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: portal-objetos-aprendizaje-kafka
+        app.kubernetes.io/instance: po
+    spec:
+      serviceAccountName: default
+      securityContext:
+        {}
+      containers:
+        - name: portal-objetos-aprendizaje
+          securityContext:
+            {}
+          image: "bitnami/kafka:3.7"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: kafka
+              containerPort: 9092
+              protocol: TCP
+          env:
+            - name: KAFKA_CFG_ZOOKEEPER_CONNECT
+              value: po-portal-objetos-aprendizaje-zookeeper-service:2181
+          
+          resources:
+            {}
+---
+# Source: portal-objetos-aprendizaje/templates/deployment-kafka.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: po-portal-objetos-aprendizaje-zookeeper
+  labels:
+    helm.sh/chart: portal-objetos-aprendizaje-0.1.0
+    
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: portal-objetos-aprendizaje-zookeeper
+    app.kubernetes.io/instance: po
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: portal-objetos-aprendizaje-zookeeper
+      app.kubernetes.io/instance: po
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: portal-objetos-aprendizaje-0.1.0
+        
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: portal-objetos-aprendizaje-zookeeper
+        app.kubernetes.io/instance: po
+    spec:
+      serviceAccountName: default
+      securityContext:
+        {}
+      containers:
+        - name: portal-objetos-aprendizaje
+          securityContext:
+            {}
+          image: "bitnami/zookeeper:3.9"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: zookeeper
+              containerPort: 2181
+              protocol: TCP
+          env:
+            - name: ALLOW_ANONYMOUS_LOGIN
+              value: "yes"
+          
+          resources:
+            {}
+---
+# Source: portal-objetos-aprendizaje/templates/deployment-mysql.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: po-portal-objetos-aprendizaje-mysql
+  labels:
+    helm.sh/chart: portal-objetos-aprendizaje-0.1.0
+    
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: portal-objetos-aprendizaje-mysql
+    app.kubernetes.io/instance: po
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: portal-objetos-aprendizaje-mysql
+      app.kubernetes.io/instance: po
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: portal-objetos-aprendizaje-0.1.0
+        
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: portal-objetos-aprendizaje-mysql
+        app.kubernetes.io/instance: po
+    spec:
+      serviceAccountName: default
+      securityContext:
+        {}
+      containers:
+        - name: portal-objetos-aprendizaje
+          securityContext:
+            {}
+          image: "mysql:8"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: mysql
+              containerPort: 3306
+              protocol: TCP
+          env:
+            - name: MYSQL_DATABASE
+              value: "portal-objetos-aprendizaje"
+            - name: MYSQL_USER
+              value: "portal-objetos-aprendizaje"
+            - name: MYSQL_PASSWORD
+              value: "!ChangeMe!.123!"
+            - name: MYSQL_RANDOM_ROOT_PASSWORD
+              value: "yes"
+          
+          resources:
+            {}
+---
+# Source: portal-objetos-aprendizaje/templates/deployment-web.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: po-portal-objetos-aprendizaje-web
+  labels:
+    helm.sh/chart: portal-objetos-aprendizaje-0.1.0
+    
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: portal-objetos-aprendizaje-web
+    app.kubernetes.io/instance: po
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: portal-objetos-aprendizaje-web
+      app.kubernetes.io/instance: po
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: portal-objetos-aprendizaje-0.1.0
+        
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: portal-objetos-aprendizaje-web
+        app.kubernetes.io/instance: po
+    spec:
+      serviceAccountName: default
+      securityContext:
+        {}
+      containers:
+        - name: portal-objetos-aprendizaje
+          securityContext:
+            {}
+          image: "ghcr.io/objetos-aprendizaje/portal-web:latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          
+          resources:
+            {}
+
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=portal-objetos-aprendizaje,app.kubernetes.io/instance=po" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT
