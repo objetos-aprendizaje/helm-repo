@@ -1,5 +1,5 @@
 NAME: po
-LAST DEPLOYED: Thu Mar  7 18:46:50 2024
+LAST DEPLOYED: Fri Mar  8 14:29:25 2024
 NAMESPACE: default
 STATUS: pending-install
 REVISION: 1
@@ -182,6 +182,24 @@ spec:
             - name: APP_DEBUG
               value: "true"
 
+            - name: APP_NAME
+              value: "ADMIN_PORTAL"
+            - name: APP_KEY
+              value: "base64:s2f6DZAfeRUGrnBwo/woMDP3Lp9w4ELdO0LEL537xHM="
+            - name: SESSION_LIFETIME
+              value: "120"
+            - name: COLOR_PRIMARY
+              value: "#2C4C7E"
+            - name: COLOR_SECONDARY
+              value: "#507AB9"
+            - name: GENERAL_ERROR_MESSAGE
+              value: "Ha ocurrido un error"
+            - name: PWRES_TOKEN_EXPIRATION_MIN
+              value: "60"
+
+            - name: APP_URL
+              value: "https://portal-objetos-aprendizaje-admin.k8s.local"
+
             - name: DB_HOST
               value: po-portal-objetos-aprendizaje-mysql-service
             - name: DB_PORT
@@ -195,9 +213,24 @@ spec:
             - name: DB_PREFIX
               value: "qvkei_"
 
+            - name: KAFKA_ENDPOINT
+              value: po-portal-objetos-aprendizaje-kafka-service:9092
+
           
           resources:
             {}
+          volumeMounts:
+            - name: public-uploads
+              mountPath: /var/www/html/public/images
+            - name: protected-uploads
+              mountPath: /var/www/html/storage
+      volumes:
+        - name: public-uploads
+          persistentVolumeClaim:
+            claimName: pvc-portable-objetos-aprendizaje-admin-public
+        - name: protected-uploads
+          persistentVolumeClaim:
+            claimName: pvc-portable-objetos-aprendizaje-admin-protected
 ---
 # Source: portal-objetos-aprendizaje/templates/deployment-kafka.yaml
 apiVersion: apps/v1
@@ -211,7 +244,6 @@ metadata:
     app.kubernetes.io/name: portal-objetos-aprendizaje-kafka
     app.kubernetes.io/instance: po
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: portal-objetos-aprendizaje-kafka
@@ -257,7 +289,6 @@ metadata:
     app.kubernetes.io/name: portal-objetos-aprendizaje-zookeeper
     app.kubernetes.io/instance: po
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: portal-objetos-aprendizaje-zookeeper
@@ -303,7 +334,6 @@ metadata:
     app.kubernetes.io/name: portal-objetos-aprendizaje-mysql
     app.kubernetes.io/instance: po
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: portal-objetos-aprendizaje-mysql
@@ -342,6 +372,13 @@ spec:
           
           resources:
             {}
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: pvc-portable-objetos-aprendizaje-mysql
 ---
 # Source: portal-objetos-aprendizaje/templates/deployment-web.yaml
 apiVersion: apps/v1
@@ -382,13 +419,92 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
+          env:
+            - name: APP_ENV
+              value: local
+            - name: APP_DEBUG
+              value: "true"
+
+            - name: APP_NAME
+              value: "WEB_PORTAL"
+            - name: APP_KEY
+              value: "base64:s2f6DZAfeRUGrnBwo/woMDP3Lp9w4ELdO0LEL537xHM="
+            - name: SESSION_LIFETIME
+              value: "120"
+            - name: COLOR_PRIMARY
+              value: "#2C4C7E"
+            - name: COLOR_SECONDARY
+              value: "#507AB9"
+            - name: BACKEND_URL
+              value: "https://portal-objetos-aprendizaje-admin.k8s.local"
+
+            - name: APP_URL
+              value: "https://portal-objetos-aprendizaje-web.k8s.local"
+
+            - name: DB_HOST
+              value: po-portal-objetos-aprendizaje-mysql-service
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_DATABASE
+              value: "portal-objetos-aprendizaje"
+            - name: DB_USERNAME
+              value: "portal-objetos-aprendizaje"
+            - name: DB_PASSWORD
+              value: "!ChangeMe!.123!"
+            - name: DB_PREFIX
+              value: "qvkei_"
+
           
           resources:
             {}
+---
+# Source: portal-objetos-aprendizaje/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: po-portal-objetos-aprendizaje-admin
+  labels:
+    helm.sh/chart: portal-objetos-aprendizaje-0.1.0
+    
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: portal-objetos-aprendizaje-admin
+    app.kubernetes.io/instance: po
+spec:
+  rules:
+    - host: portal-objetos-aprendizaje-admin.k8s.local
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: po-portal-objetos-aprendizaje-admin
+                port:
+                  number: 80
+---
+# Source: portal-objetos-aprendizaje/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: po-portal-objetos-aprendizaje-web
+  labels:
+    helm.sh/chart: portal-objetos-aprendizaje-0.1.0
+    
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: portal-objetos-aprendizaje-web
+    app.kubernetes.io/instance: po
+spec:
+  rules:
+    - host: portal-objetos-aprendizaje-web.k8s.local
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: po-portal-objetos-aprendizaje-web
+                port:
+                  number: 80
 
 NOTES:
 1. Get the application URL by running these commands:
-  export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=portal-objetos-aprendizaje,app.kubernetes.io/instance=po" -o jsonpath="{.items[0].metadata.name}")
-  export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
-  echo "Visit http://127.0.0.1:8080 to use your application"
-  kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT

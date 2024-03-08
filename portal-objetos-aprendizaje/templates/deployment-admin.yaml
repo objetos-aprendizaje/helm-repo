@@ -104,7 +104,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: public-uploads
-              mountPath: /var/www/html/public/storage ## TODO: Confirm !!!!
+              mountPath: /var/www/html/public/images
             - name: protected-uploads
               mountPath: /var/www/html/storage
           {{- with .Values.volumeMounts }}

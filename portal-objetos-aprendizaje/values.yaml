@@ -78,18 +78,21 @@ service:
 ingress:
   enabled: false
   className: ""
+  # className: "traefik"
+  pathType: ImplementationSpecific
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  admin:
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - portal-objetos-aprendizaje-admin.k8s.local
+  web:
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - portal-objetos-aprendizaje-web.k8s.local
 
 resources: {}
   # If you do want to specify resources (this will apply all the deployments), uncomment the following
