@@ -48,6 +48,9 @@
    - Replace `<namespace-name>` with the name of the namespace where the release will be installed.
    - Use `-f` flag followed by the path to your values file (e.g., `values.yaml`) to specify the configuration options for the Helm chart.
 
+5. **Access to the platform**
+
+   If everything goes well you should be able to login using the default admin user: `admin@admin.com` with password `admin-poa-2024`
 
 ## Developer guide
 
