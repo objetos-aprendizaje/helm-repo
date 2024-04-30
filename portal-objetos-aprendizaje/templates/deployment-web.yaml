@@ -51,7 +51,10 @@ spec:
             - name: APP_NAME
               value: "WEB_PORTAL"
             - name: APP_KEY
-              value: "{{ .Values.web.appKey }}"
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.web.appKeySecret }}"
+                  key: app_key
             - name: SESSION_LIFETIME
               value: "{{ .Values.web.sessionLifetime }}"
             - name: COLOR_PRIMARY
@@ -81,7 +84,10 @@ spec:
             - name: DB_USERNAME
               value: "{{ .Values.mysql.mysqlUser }}"
             - name: DB_PASSWORD
-              value: "{{ .Values.mysql.mysqlPassword }}"
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.mysql.mysqlPasswordSecret }}"
+                  key: password
             - name: DB_PREFIX
               value: "{{ .Values.mysql.mysqlTablePrefix }}"
 
@@ -92,7 +98,7 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           */}}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.web.resources | nindent 12 }}
           {{- with .Values.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}

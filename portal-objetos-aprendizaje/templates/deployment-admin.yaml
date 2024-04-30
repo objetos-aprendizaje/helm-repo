@@ -51,7 +51,10 @@ spec:
             - name: APP_NAME
               value: "ADMIN_PORTAL"
             - name: APP_KEY
-              value: "{{ .Values.admin.appKey }}"
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.admin.appKeySecret }}"
+                  key: app_key
             - name: SESSION_LIFETIME
               value: "{{ .Values.admin.sessionLifetime }}"
             - name: COLOR_PRIMARY
@@ -83,7 +86,10 @@ spec:
             - name: DB_USERNAME
               value: "{{ .Values.mysql.mysqlUser }}"
             - name: DB_PASSWORD
-              value: "{{ .Values.mysql.mysqlPassword }}"
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.mysql.mysqlPasswordSecret }}"
+                  key: password
             - name: DB_PREFIX
               value: "{{ .Values.mysql.mysqlTablePrefix }}"
 
@@ -101,7 +107,7 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           */}}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.admin.resources | nindent 12 }}
           volumeMounts:
             - name: public-uploads
               mountPath: /var/www/html/public/images

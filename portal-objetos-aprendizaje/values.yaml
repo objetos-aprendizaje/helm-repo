@@ -8,7 +8,7 @@ fullnameOverride: ""
 mysql:
   enabled: true
   mysqlUser: "portal-objetos-aprendizaje"
-  mysqlPassword: "!ChangeMe!.123!"
+  mysqlPasswordSecret: "poa-mysql-password-secret"
   mysqlDatabase: "portal-objetos-aprendizaje"
   mysqlTablePrefix: "qvkei_"
   # If mysql deployment is enabled
@@ -18,6 +18,15 @@ mysql:
     repository: mysql
     pullPolicy: IfNotPresent
     pullSecrets: []
+  resources: {}
+    # If you do want to specify resources (this will apply all the deployments), uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
   # If mysql deployment is not enabled
   mysqlHost: ""
   mysqlPort: 3306
@@ -30,22 +39,38 @@ kafka:
     repository: bitnami/kafka
     pullPolicy: IfNotPresent
     pullSecrets: []
+  resources: {}
+    # If you do want to specify resources (this will apply all the deployments), uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
   zookeeper:
     image:
       tag: "3.9"
       repository: bitnami/zookeeper
       pullPolicy: IfNotPresent
       pullSecrets: []
+    resources: {}
+      # If you do want to specify resources (this will apply all the deployments), uncomment the following
+      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      # limits:
+      #   cpu: 100m
+      #   memory: 128Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 128Mi
   # If kafka deployment is not enabled
   kafkaHost: "override-kafka.host"
   kafkaPort: 9092
 
-replicaCount: 1
-
 admin:
   # PublicURL is used for url generation and ingress if enabled
   publicUrl: "https://portal-objetos-aprendizaje-admin.k8s.local"
-  appKey: "base64:s2f6DZAfeRUGrnBwo/woMDP3Lp9w4ELdO0LEL537xHM="
+  appKeySecret: "poa-admin-appkey-secret"
   sessionLifetime: "120"
   colorPrimary: "#2C4C7E"
   colorSecondary: "#507AB9"
@@ -58,10 +83,19 @@ admin:
     repository: ghcr.io/objetos-aprendizaje/portal-administracion
     pullPolicy: IfNotPresent
     pullSecrets: []
+  resources: {}
+    # If you do want to specify resources (this will apply all the deployments), uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
 web:
   # PublicURL is used for url generation and ingress if enabled
   publicUrl: "https://portal-objetos-aprendizaje-web.k8s.local"
-  appKey: "base64:s2f6DZAfeRUGrnBwo/woMDP3Lp9w4ELdO0LEL537xHM="
+  appKeySecret: "poa-web-appkey-secret"
   sessionLifetime: "120"
   colorPrimary: "#2C4C7E"
   colorSecondary: "#507AB9"
@@ -70,6 +104,15 @@ web:
     repository: ghcr.io/objetos-aprendizaje/portal-web
     pullPolicy: IfNotPresent
     pullSecrets: []
+  resources: {}
+    # If you do want to specify resources (this will apply all the deployments), uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
 
 service:
   type: ClusterIP
@@ -94,16 +137,7 @@ ingress:
     #    hosts:
     #      - portal-objetos-aprendizaje-web.k8s.local
 
-resources: {}
-  # If you do want to specify resources (this will apply all the deployments), uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
+replicaCount: 1
 # NOTE: HorizontalPodAutoscaler is not supported unless php session is stored in a shared storage
 autoscaling:
   enabled: false

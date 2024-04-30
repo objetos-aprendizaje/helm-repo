@@ -46,7 +46,10 @@ spec:
             - name: MYSQL_USER
               value: "{{ .Values.mysql.mysqlUser }}"
             - name: MYSQL_PASSWORD
-              value: "{{ .Values.mysql.mysqlPassword }}"
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.mysql.mysqlPasswordSecret }}"
+                  key: password
             - name: MYSQL_RANDOM_ROOT_PASSWORD
               value: "yes"
           {{/*
@@ -56,7 +59,7 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           */}}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.mysql.resources | nindent 12 }}
           volumeMounts:
             - name: data
               mountPath: /var/lib/mysql

@@ -16,7 +16,7 @@
 
    Replace `<namespace-name>` with the desired name for the namespace.
 
-3. **Create persistent volumes:**
+3. **Create persistent volumes and secrets:**
 
    You must create persistent volumes and volume claims for persistent data in the installation, there are two required volumes by this application for public and protected data uploads. You can customize the persistent volume claim name by modifying chart values (keys `admin.existingPVClaimPublic` and `admin.existingPVClaimProtected`), the default expected pvc names are:
    `pvc-portable-objetos-aprendizaje-admin-public` and `pvc-portable-objetos-aprendizaje-admin-protected`
@@ -25,6 +25,7 @@
 
    There are also some manifest examples under [extra-manifest-examples folder](https://github.com/objetos-aprendizaje/helm-repo/tree/main/extra-manifest-examples) at this chart repository. Note that they are illustrative and using hostpath /tmp folder, so this is not intended to be used for production.
 
+   For app secrets it is configured in the same way, the system will require the secrets `poa-mysql-password-secret`, `poa-admin-appkey-secret` and `poa-web-appkey-secret` (unless changed names on values.yml). There are also [one manifest example](https://github.com/objetos-aprendizaje/helm-repo/tree/main/extra-manifest-examples/required-secrets.yaml) under extra-manifest-examples folder.
 
 4. **Install Helm Chart:**
 
