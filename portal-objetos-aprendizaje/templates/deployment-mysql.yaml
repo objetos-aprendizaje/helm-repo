@@ -44,7 +44,10 @@ spec:
             - name: MYSQL_DATABASE
               value: "{{ .Values.mysql.mysqlDatabase }}"
             - name: MYSQL_USER
-              value: "{{ .Values.mysql.mysqlUser }}"
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.mysql.mysqlUserSecret }}"
+                  key: password"
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:

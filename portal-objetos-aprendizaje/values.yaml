@@ -6,13 +6,16 @@ nameOverride: ""
 fullnameOverride: ""
 
 mysql:
+  # Determine if this resource should be created by helm app
   enabled: true
-  mysqlUser: "portal-objetos-aprendizaje"
-  mysqlPasswordSecret: "poa-mysql-password-secret"
+  # It is possible to use same secret for all mysql values or use different secrets for each value
+  mysqlUserSecret: "poa-mysql-secret"
+  mysqlPasswordSecret: "poa-mysql-secret"
   mysqlDatabase: "portal-objetos-aprendizaje"
   mysqlTablePrefix: "qvkei_"
   # If mysql deployment is enabled
   existingPVClaim: "pvc-portable-objetos-aprendizaje-mysql"
+  # Customize service docker image used (image, tag, pullPolicy, pullSecrets)
   image:
     tag: "8"
     repository: mysql
@@ -28,12 +31,14 @@ mysql:
     #   cpu: 100m
     #   memory: 128Mi
   # If mysql deployment is not enabled
-  mysqlHost: ""
+  mysqlHostSecret: "poa-mysql-secret"
   mysqlPort: 3306
 
 kafka:
+  # Determine if this resource should be created by helm app
   enabled: true
   # If kafka deployment is enabled
+  # Customize service docker image used (image, tag, pullPolicy, pullSecrets)
   image:
     tag: "3.7"
     repository: bitnami/kafka
@@ -49,6 +54,7 @@ kafka:
     #   cpu: 100m
     #   memory: 128Mi
   zookeeper:
+    # Customize service docker image used (image, tag, pullPolicy, pullSecrets)
     image:
       tag: "3.9"
       repository: bitnami/zookeeper
@@ -68,16 +74,21 @@ kafka:
   kafkaPort: 9092
 
 admin:
-  # PublicURL is used for url generation and ingress if enabled
+  # PublicURL is used for url generation and ingress if enabled togheter to parametrization of service
   publicUrl: "https://portal-objetos-aprendizaje-admin.k8s.local"
+  # Used for laravel configuration (seed for tokens, session, etc.)
   appKeySecret: "poa-admin-appkey-secret"
+  # Session lifetime in minutes
   sessionLifetime: "120"
+  # Interface app color configuration
   colorPrimary: "#2C4C7E"
   colorSecondary: "#507AB9"
   generalErrorMessage: "Ha ocurrido un error"
   pwresTokenExpirationMin: "60"
+  # Persistent volume claims names for service
   existingPVClaimPublic: "pvc-portable-objetos-aprendizaje-admin-public"
   existingPVClaimProtected: "pvc-portable-objetos-aprendizaje-admin-protected"
+  # Customize service docker image used (image, tag, pullPolicy, pullSecrets)
   image:
     tag: "latest"
     repository: ghcr.io/objetos-aprendizaje/portal-administracion
@@ -93,12 +104,15 @@ admin:
     #   cpu: 100m
     #   memory: 128Mi
 web:
-  # PublicURL is used for url generation and ingress if enabled
+  # PublicURL is used for url generation and ingress if enabled togheter to parametrization of service
   publicUrl: "https://portal-objetos-aprendizaje-web.k8s.local"
+  # Used for laravel configuration (seed for tokens, session, etc.)
   appKeySecret: "poa-web-appkey-secret"
+  # Session lifetime in minutes
   sessionLifetime: "120"
   colorPrimary: "#2C4C7E"
   colorSecondary: "#507AB9"
+  # Customize service docker image used (image, tag, pullPolicy, pullSecrets)
   image:
     tag: "latest"
     repository: ghcr.io/objetos-aprendizaje/portal-web
@@ -118,14 +132,17 @@ service:
   type: ClusterIP
   port: 80
 
+# Create Ingress resources from chart installation. This is optional, it's also possible to disable and use your own Ingress controller.
 ingress:
+  # Determine if this resource should be created by helm app
   enabled: true
-  className: ""
-  # className: "traefik"
+  className: "" # ex: "traefik"
   pathType: ImplementationSpecific
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
+
+  # Setup https certificate secrets for the different services hosts (defined in publicUrl of admin and web services)
   admin:
     tls: []
     #  - secretName: chart-example-tls
@@ -136,6 +153,13 @@ ingress:
     #  - secretName: chart-example-tls
     #    hosts:
     #      - portal-objetos-aprendizaje-web.k8s.local
+
+
+
+
+## ----- ##
+## Other optional configurations and advanced features. Not required for app usage ##
+## ----- ##
 
 replicaCount: 1
 # NOTE: HorizontalPodAutoscaler is not supported unless php session is stored in a shared storage
@@ -159,7 +183,7 @@ volumeMounts: []
 #   mountPath: "/etc/foo"
 #   readOnly: true
 
-# Other optional configurations and advanced features
+# Node labels for pod assignment
 nodeSelector: {}
 tolerations: []
 affinity: {}

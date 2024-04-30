@@ -25,7 +25,7 @@
 
    There are also some manifest examples under [extra-manifest-examples folder](https://github.com/objetos-aprendizaje/helm-repo/tree/main/extra-manifest-examples) at this chart repository. Note that they are illustrative and using hostpath /tmp folder, so this is not intended to be used for production.
 
-   For app secrets it is configured in the same way, the system will require the secrets `poa-mysql-password-secret`, `poa-admin-appkey-secret` and `poa-web-appkey-secret` (unless changed names on values.yml). There are also [one manifest example](https://github.com/objetos-aprendizaje/helm-repo/tree/main/extra-manifest-examples/required-secrets.yaml) under extra-manifest-examples folder.
+   For app secrets it is configured in the same way, the system will require the secrets `poa-mysql-secret`, `poa-admin-appkey-secret` and `poa-web-appkey-secret` (unless changed names on values.yml). There are also [one manifest example](https://github.com/objetos-aprendizaje/helm-repo/tree/main/extra-manifest-examples/required-secrets.yaml) under extra-manifest-examples folder.
 
 4. **Install Helm Chart:**
 

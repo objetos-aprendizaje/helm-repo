@@ -71,7 +71,10 @@ spec:
               {{- if .Values.mysql.enabled }}
               value: {{ include "portal-objetos-aprendizaje.fullname" . }}-mysql-service
               {{- else }}
-              value: "{{ .Values.mysql.mysqlHost }}"
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.mysql.mysqlHostSecret }}"
+                  key: password"
               {{- end }}
             - name: DB_PORT
               {{- if .Values.mysql.enabled }}
@@ -82,7 +85,10 @@ spec:
             - name: DB_DATABASE
               value: "{{ .Values.mysql.mysqlDatabase }}"
             - name: DB_USERNAME
-              value: "{{ .Values.mysql.mysqlUser }}"
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.mysql.mysqlUserSecret }}"
+                  key: password"
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
