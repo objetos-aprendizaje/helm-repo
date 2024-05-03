@@ -76,7 +76,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: "{{ .Values.mysql.mysqlHostSecret }}"
-                  key: password"
+                  key: host
               {{- end }}
             - name: DB_PORT
               {{- if .Values.mysql.enabled }}
@@ -90,7 +90,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: "{{ .Values.mysql.mysqlUserSecret }}"
-                  key: password"
+                  key: user
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
