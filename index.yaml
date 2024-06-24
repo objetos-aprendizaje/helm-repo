@@ -2,7 +2,16 @@ apiVersion: v1
 entries:
   portal-objetos-aprendizaje:
   - apiVersion: v2
-    created: "2024-05-03T13:58:40.06142+02:00"
+    created: "2024-06-24T13:38:30.430575+02:00"
+    description: Portal de Objetos de Aprendizaje
+    digest: 5995926c578a7f76c6575b3789e4053dcee7130dd6c1e07e57d4d5550dcfa976
+    name: portal-objetos-aprendizaje
+    type: application
+    urls:
+    - charts/portal-objetos-aprendizaje-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    created: "2024-06-24T13:38:30.430123+02:00"
     description: Portal de Objetos de Aprendizaje
     digest: 8e7810832b9d88aa345e842cc19b64276fdc78d90d45884958cdbdf8231a5389
     name: portal-objetos-aprendizaje
@@ -11,7 +20,7 @@ entries:
     - charts/portal-objetos-aprendizaje-0.1.2.tgz
     version: 0.1.2
   - apiVersion: v2
-    created: "2024-05-03T13:58:40.061038+02:00"
+    created: "2024-06-24T13:38:30.428729+02:00"
     description: Portal de Objetos de Aprendizaje
     digest: 56211af007f1b2c138f9ae7b6b2f3a8031ac42000e413890ece0a1e021d2a88e
     name: portal-objetos-aprendizaje
@@ -20,7 +29,7 @@ entries:
     - charts/portal-objetos-aprendizaje-0.1.1.tgz
     version: 0.1.1
   - apiVersion: v2
-    created: "2024-05-03T13:58:40.060396+02:00"
+    created: "2024-06-24T13:38:30.427761+02:00"
     description: Portal de Objetos de Aprendizaje
     digest: cffe511a9fafebae178d8cbf655cac7e5b64b464f2b443246101988778cb46cf
     name: portal-objetos-aprendizaje
@@ -28,4 +37,4 @@ entries:
     urls:
     - charts/portal-objetos-aprendizaje-0.1.0.tgz
     version: 0.1.0
-generated: "2024-05-03T13:58:40.059318+02:00"
+generated: "2024-06-24T13:38:30.426187+02:00"

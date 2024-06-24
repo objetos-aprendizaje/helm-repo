@@ -44,7 +44,7 @@ spec:
               protocol: TCP
           env:
             - name: APP_ENV
-              value: local
+              value: production
             - name: APP_DEBUG
               value: "true"
 
