@@ -77,6 +77,7 @@ admin:
   # PublicURL is used for url generation and ingress if enabled togheter to parametrization of service
   publicUrl: "https://portal-objetos-aprendizaje-admin.k8s.local"
   # Used for laravel configuration (seed for tokens, session, etc.)
+  # needs to be a valid key generated with "php artisan key:generate" (ex. base64:X/tI11778LT12XntodYdmSrpbtgh9WNzjmlfxBzu1bw=)
   appKeySecret: "poa-admin-appkey-secret"
   # Session lifetime in minutes
   sessionLifetime: "120"
@@ -92,7 +93,7 @@ admin:
   image:
     tag: "latest"
     repository: ghcr.io/objetos-aprendizaje/portal-administracion
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
     pullSecrets: []
   resources: {}
     # If you do want to specify resources (this will apply all the deployments), uncomment the following
@@ -107,6 +108,7 @@ web:
   # PublicURL is used for url generation and ingress if enabled togheter to parametrization of service
   publicUrl: "https://portal-objetos-aprendizaje-web.k8s.local"
   # Used for laravel configuration (seed for tokens, session, etc.)
+  # needs to be a valid key generated with "php artisan key:generate" (ex. base64:X/tI11778LT12XntodYdmSrpbtgh9WNzjmlfxBzu1bw=)
   appKeySecret: "poa-web-appkey-secret"
   # Session lifetime in minutes
   sessionLifetime: "120"
@@ -116,7 +118,7 @@ web:
   image:
     tag: "latest"
     repository: ghcr.io/objetos-aprendizaje/portal-web
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
     pullSecrets: []
   resources: {}
     # If you do want to specify resources (this will apply all the deployments), uncomment the following
