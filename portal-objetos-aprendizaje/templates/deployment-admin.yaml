@@ -69,6 +69,8 @@ spec:
             - name: APP_URL
               value: "{{ .Values.admin.publicUrl }}"
 
+            - name: DB_CONNECTION
+              value: pgsql
             - name: DB_HOST
               {{- if .Values.postgresql.enabled }}
               value: {{ include "portal-objetos-aprendizaje.fullname" . }}-postgresql-service
