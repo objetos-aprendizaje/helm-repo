@@ -68,34 +68,34 @@ spec:
               value: "{{ .Values.web.publicUrl }}"
 
             - name: DB_HOST
-              {{- if .Values.mysql.enabled }}
-              value: {{ include "portal-objetos-aprendizaje.fullname" . }}-mysql-service
+              {{- if .Values.postgresql.enabled }}
+              value: {{ include "portal-objetos-aprendizaje.fullname" . }}-postgresql-service
               {{- else }}
               valueFrom:
                 secretKeyRef:
-                  name: "{{ .Values.mysql.mysqlHostSecret }}"
+                  name: "{{ .Values.postgresql.postgresqlHostSecret }}"
                   key: host
               {{- end }}
             - name: DB_PORT
-              {{- if .Values.mysql.enabled }}
-              value: "3306"
+              {{- if .Values.postgresql.enabled }}
+              value: "5432"
               {{- else }}
-              value: "{{ .Values.mysql.mysqlPort }}"
+              value: "{{ .Values.postgresql.postgresqlPort }}"
               {{- end }}
             - name: DB_DATABASE
-              value: "{{ .Values.mysql.mysqlDatabase }}"
+              value: "{{ .Values.postgresql.postgresqlDatabase }}"
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: "{{ .Values.mysql.mysqlUserSecret }}"
+                  name: "{{ .Values.postgresql.postgresqlUserSecret }}"
                   key: user
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: "{{ .Values.mysql.mysqlPasswordSecret }}"
+                  name: "{{ .Values.postgresql.postgresqlPasswordSecret }}"
                   key: password
             - name: DB_PREFIX
-              value: "{{ .Values.mysql.mysqlTablePrefix }}"
+              value: "{{ .Values.postgresql.postgresqlTablePrefix }}"
 
           {{/*
           livenessProbe:

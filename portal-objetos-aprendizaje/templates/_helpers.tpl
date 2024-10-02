@@ -72,10 +72,10 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Selector labels mysql
+Selector labels postgresql
 */}}
-{{- define "portal-objetos-aprendizaje-mysql.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "portal-objetos-aprendizaje.name" . }}-mysql
+{{- define "portal-objetos-aprendizaje-postgresql.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "portal-objetos-aprendizaje.name" . }}-postgresql
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 

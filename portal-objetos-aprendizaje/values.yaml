@@ -5,20 +5,20 @@
 nameOverride: ""
 fullnameOverride: ""
 
-mysql:
+postgresql:
   # Determine if this resource should be created by helm app
   enabled: true
-  # It is possible to use same secret for all mysql values or use different secrets for each value
-  mysqlUserSecret: "poa-mysql-secret"
-  mysqlPasswordSecret: "poa-mysql-secret"
-  mysqlDatabase: "portal-objetos-aprendizaje"
-  mysqlTablePrefix: "qvkei_"
-  # If mysql deployment is enabled
-  existingPVClaim: "pvc-portable-objetos-aprendizaje-mysql"
+  # It is possible to use same secret for all postgresql values or use different secrets for each value
+  postgresqlUserSecret: "poa-postgresql-secret"
+  postgresqlPasswordSecret: "poa-postgresql-secret"
+  postgresqlDatabase: "portal-objetos-aprendizaje"
+  postgresqlTablePrefix: "qvkei_"
+  # If postgresql deployment is enabled
+  existingPVClaim: "pvc-portable-objetos-aprendizaje-postgresql"
   # Customize service docker image used (image, tag, pullPolicy, pullSecrets)
   image:
-    tag: "8"
-    repository: mysql
+    tag: "pg17"
+    repository: pgvector/pgvector
     pullPolicy: IfNotPresent
     pullSecrets: []
   resources: {}
@@ -30,9 +30,9 @@ mysql:
     # requests:
     #   cpu: 100m
     #   memory: 128Mi
-  # If mysql deployment is not enabled
-  mysqlHostSecret: "poa-mysql-secret"
-  mysqlPort: 3306
+  # If postgresql deployment is not enabled
+  postgresqlHostSecret: "poa-postgresql-secret"
+  postgresqlPort: 5432
 
 kafka:
   # Determine if this resource should be created by helm app

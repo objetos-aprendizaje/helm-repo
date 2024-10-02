@@ -1,15 +1,15 @@
-{{- if .Values.mysql.enabled -}}
+{{- if .Values.postgresql.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "portal-objetos-aprendizaje.fullname" . }}-mysql
+  name: {{ include "portal-objetos-aprendizaje.fullname" . }}-postgresql
   labels:
     {{- include "portal-objetos-aprendizaje.labels" . | nindent 4 }}
-    {{- include "portal-objetos-aprendizaje-mysql.selectorLabels" . | nindent 4 }}
+    {{- include "portal-objetos-aprendizaje-postgresql.selectorLabels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      {{- include "portal-objetos-aprendizaje-mysql.selectorLabels" . | nindent 6 }}
+      {{- include "portal-objetos-aprendizaje-postgresql.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,12 +18,12 @@ spec:
       {{- end }}
       labels:
         {{- include "portal-objetos-aprendizaje.labels" . | nindent 8 }}
-        {{- include "portal-objetos-aprendizaje-mysql.selectorLabels" . | nindent 8 }}
+        {{- include "portal-objetos-aprendizaje-postgresql.selectorLabels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      {{- with .Values.mysql.image.pullSecrets }}
+      {{- with .Values.postgresql.image.pullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -34,27 +34,25 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.mysql.image.repository }}:{{ .Values.mysql.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.mysql.image.pullPolicy }}
+          image: "{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
           ports:
-            - name: mysql
-              containerPort: 3306
+            - name: postgresql
+              containerPort: 5432
               protocol: TCP
           env:
-            - name: MYSQL_DATABASE
-              value: "{{ .Values.mysql.mysqlDatabase }}"
-            - name: MYSQL_USER
+            - name: POSTGRES_DB
+              value: "{{ .Values.postgresql.postgresqlDatabase }}"
+            - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: "{{ .Values.mysql.mysqlUserSecret }}"
+                  name: "{{ .Values.postgresql.postgresqlUserSecret }}"
                   key: user
-            - name: MYSQL_PASSWORD
+            - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: "{{ .Values.mysql.mysqlPasswordSecret }}"
+                  name: "{{ .Values.postgresql.postgresqlPasswordSecret }}"
                   key: password
-            - name: MYSQL_RANDOM_ROOT_PASSWORD
-              value: "yes"
           {{/*
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
@@ -62,17 +60,17 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           */}}
           resources:
-            {{- toYaml .Values.mysql.resources | nindent 12 }}
+            {{- toYaml .Values.postgresql.resources | nindent 12 }}
           volumeMounts:
             - name: data
-              mountPath: /var/lib/mysql
+              mountPath: /var/lib/postgresql
           {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: {{ tpl .Values.mysql.existingPVClaim . }}
+            claimName: {{ tpl .Values.postgresql.existingPVClaim . }}
       {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
