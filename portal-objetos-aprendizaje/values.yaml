@@ -30,7 +30,7 @@ postgresql:
     # requests:
     #   cpu: 100m
     #   memory: 128Mi
-  # If postgresql deployment is not enabled
+  # If postgresql deployment is not enabled (use external database), the external database requires pg_vector extension
   postgresqlHostSecret: "poa-postgresql-secret"
   postgresqlPort: 5432
 
