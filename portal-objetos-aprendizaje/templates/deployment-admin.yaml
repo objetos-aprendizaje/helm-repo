@@ -65,6 +65,8 @@ spec:
               value: "{{ .Values.admin.generalErrorMessage }}"
             - name: PWRES_TOKEN_EXPIRATION_MIN
               value: "{{ .Values.admin.pwresTokenExpirationMin }}"
+            - name: FMNT_CERT_HEADER
+              value: "{{ .Values.admin.fmntCertHeader }}"
 
             - name: APP_URL
               value: "{{ .Values.admin.publicUrl }}"

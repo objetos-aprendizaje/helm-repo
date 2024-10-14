@@ -86,6 +86,8 @@ admin:
   colorSecondary: "#507AB9"
   generalErrorMessage: "Ha ocurrido un error"
   pwresTokenExpirationMin: "60"
+  # Header for fmnt client cert (needs to be in PEM format)
+  fmntCertHeader: "X-Forwarded-Tls-Client-Cert"
   # Persistent volume claims names for service
   existingPVClaimPublic: "pvc-portable-objetos-aprendizaje-admin-public"
   existingPVClaimProtected: "pvc-portable-objetos-aprendizaje-admin-protected"

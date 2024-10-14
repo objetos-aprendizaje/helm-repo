@@ -53,6 +53,12 @@
 
    If everything goes well you should be able to login using the default admin user: `admin@admin.com` with password `12345678`
 
+## Using FMNT client certificates
+
+In order to use FMNT client certificates for authentication you need to setup a route with higher priority for path `/certificate-access` that requests client certificate on SSL connection and redirect to service `{{ include "portal-objetos-aprendizaje.fullname" . }}-admin-service` (check [_helpers.tpl](./portal-objetos-aprendizaje/templates/_helpers.tpl) file to see how portal-objetos-aprendizaje.fullname is generated).
+
+This request should include a header with client certificate pem content, by default the header used is called `X-Forwarded-Tls-Client-Cert` but it can be changed by configuring value `admin.fmntCertHeader`.
+
 ## Developer guide
 
 ### Install directly lastest version
