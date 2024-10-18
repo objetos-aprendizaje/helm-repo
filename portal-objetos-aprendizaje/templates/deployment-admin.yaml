@@ -50,6 +50,10 @@ spec:
 
             - name: APP_NAME
               value: "ADMIN_PORTAL"
+            - name: TIMEZONE_DISPLAY
+              value: "Europe/Madrid"
+            - name: TIMEZONE
+              value: "UTC"
             - name: APP_KEY
               valueFrom:
                 secretKeyRef:
