@@ -67,6 +67,8 @@ spec:
               value: "{{ .Values.web.colorSecondary }}"
             - name: BACKEND_URL
               value: "{{ .Values.admin.publicUrl }}"
+            - name: FMNT_CERT_HEADER
+              value: "{{ .Values.web.fmntCertHeader }}"
 
             - name: APP_URL
               value: "{{ .Values.web.publicUrl }}"

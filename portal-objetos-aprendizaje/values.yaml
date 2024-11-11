@@ -116,6 +116,8 @@ web:
   sessionLifetime: "120"
   colorPrimary: "#2C4C7E"
   colorSecondary: "#507AB9"
+  # Header for fmnt client cert (needs to be in PEM format)
+  fmntCertHeader: "X-Forwarded-Tls-Client-Cert"
   # Customize service docker image used (image, tag, pullPolicy, pullSecrets)
   image:
     tag: "latest"

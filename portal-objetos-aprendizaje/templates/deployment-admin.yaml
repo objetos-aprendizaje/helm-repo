@@ -74,6 +74,8 @@ spec:
 
             - name: APP_URL
               value: "{{ .Values.admin.publicUrl }}"
+            - name: FRONT_URL
+              value: "{{ .Values.web.publicUrl }}"
 
             - name: DB_CONNECTION
               value: pgsql
