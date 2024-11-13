@@ -51,13 +51,17 @@
 
 5. **Access to the platform**
 
-   If everything goes well you should be able to login using the default admin user: `admin@admin.com` with password `12345678`
+   If everything goes well you should be able to login using the default admin user: `admin@admin.com` with password `12345678`.
+
+   In case that do you want to load demo data into the platform you should start a exec session on portal-objetos-aprendizaje-admin pod and execute `php artisan db:seed`.
 
 ## Using FMNT client certificates
 
-In order to use FMNT client certificates for authentication you need to setup a route with higher priority for path `/certificate-access` that requests client certificate on SSL connection and redirect to service `{{ include "portal-objetos-aprendizaje.fullname" . }}-admin-service` (check [_helpers.tpl](./portal-objetos-aprendizaje/templates/_helpers.tpl) file to see how portal-objetos-aprendizaje.fullname is generated).
+In order to use FMNT client certificates for authentication you need to setup a ingress route with higher priority for path `/certificate-access` that requests client certificate on SSL connection and redirect to service `{{ include "portal-objetos-aprendizaje.fullname" . }}-admin-service` (check [_helpers.tpl](./portal-objetos-aprendizaje/templates/_helpers.tpl) file to see how portal-objetos-aprendizaje.fullname is generated).
 
-This request should include a header with client certificate pem content, by default the header used is called `X-Forwarded-Tls-Client-Cert` but it can be changed by configuring value `admin.fmntCertHeader`.
+This request should include a header with client certificate pem content (without begin/end tags nor line breaks), by default the header used is called `X-Forwarded-Tls-Client-Cert` but it can be changed by configuring value `admin.fmntCertHeader`.
+
+There are some manifests examples using traefik in k8s cluster as the edge inbound load balancer to configure client certificate authentication and header pem binding to backend using `X-Forwarded-Tls-Client-Cert` header in the [fmnt-traefik-ingress.yaml](./extra-manifest-examples/fmnt-traefik-ingress.yaml) example file.
 
 ## Developer guide
 
