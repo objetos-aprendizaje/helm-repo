@@ -29,9 +29,11 @@
 
 4. **Install Helm Chart:**
 
-    ```bash
-    helm install <release-name> portal-objetos-aprendizaje --namespace <namespace-name>
-    ```
+   ```bash
+   helm install <release-name> portal-objetos-aprendizaje --namespace <namespace-name>
+   # To upgrade to latest version after install you should use upgrade instead of install
+   helm upgrade <release-name> portal-objetos-aprendizaje --namespace <namespace-name>
+   ```
 
    - Replace `<release-name>` with the desired name for the release.
    - Replace `<namespace-name>` with the name of the namespace where the release will be installed.
@@ -42,6 +44,8 @@
 
    ```bash
    helm install <release-name> <chart-name> --namespace <namespace-name> -f values.yaml
+   # To upgrade to latest version after install you should use upgrade instead of install
+   helm upgrade <release-name> <chart-name> --namespace <namespace-name> -f values.yaml
    ```
 
    - Replace `<release-name>` with the desired name for the release.
