@@ -85,6 +85,37 @@ This request should include a header with client certificate pem content (withou
 
 There are some manifests examples using traefik in k8s cluster as the edge inbound load balancer to configure client certificate authentication and header pem binding to backend using `X-Forwarded-Tls-Client-Cert` header in the [fmnt-traefik-ingress.yaml](./extra-manifest-examples/fmnt-traefik-ingress.yaml) example file.
 
+## Minimal System Requirements
+
+A series of performance tests have been conducted on the platform. For these tests, container monitoring was implemented on the pre-production deployment using the cAdvisor tool.
+
+Screenshots of the test results have been attached under [./docs folder](./docs), showing the containers that had the most substantial resource usage. To generate load on the system, a test data import script was used. According to discussions with Juan Antonio, the execution of this script involves inserting all types of elements, which results in resource usage higher than expected during a fresh instance, like the ones being prepared. Thus, it can be considered as the minimum requirements.
+
+The tests were performed on a machine with the following technical specifications:
+- **CPU**: 12 x AMD Ryzen 7 5800X 8-Core Processor (this can help assess the performance of 1 core in the test node)
+- **NVMe Disks**: SAMSUNG MZQLB960HAJR-00007 (advertised speed: 3200 MB/s)
+
+### Components with Substantial Resource Usage
+
+1. **Database** (PostgreSQL with the pgvector extension):
+   - **CPU**:
+     - Maximum usage did not exceed 300 millicores, stabilizing around 200 millicores. However, a **minimum of 1000 millicores** is recommended.
+   - **Memory**:
+     - Usage was around 250MB. A **minimum of 1GB** is recommended, as more memory will be needed as the data volume increases.
+
+2. **Administration Portal**:
+   - The data import load was carried out here, but components of the web portal and worker (for asynchronous tasks) could be scaled similarly. All components are proposed through the Laravel framework, with identical or very similar logic.
+   - **CPU**:
+     - An initial peak of 750 millicores was observed, which then stabilized around 600 millicores. Since this is already high usage, a **minimum of 500 millicores** might be a reasonable value.
+   - **Memory**:
+     - Usage stabilized around 150MB. A **minimum of 512MB** is recommended for this component.
+
+### Testing Environment & Results
+
+The resources mentioned above are the limits setted up in the development pre-production deployment. This environment has been used for performance testing, as well as for comparisons with other deployments.
+
+- Tests conducted by navigating the platform with a user resulted in screen load times ranging from milliseconds to a couple of seconds, with CPU usage spikes around 300 millicores and maximum RAM usage reaching 300MB.
+
 ## Developer guide
 
 ### Install directly lastest version
