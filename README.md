@@ -25,7 +25,25 @@
 
    There are also some manifest examples under [extra-manifest-examples folder](https://github.com/objetos-aprendizaje/helm-repo/tree/main/extra-manifest-examples) at this chart repository. Note that they are illustrative and using hostpath /tmp folder, so this is not intended to be used for production.
 
-   For app secrets it is configured in the same way, the system will require the secrets `poa-postgresql-secret`, `poa-admin-appkey-secret` and `poa-web-appkey-secret` (unless changed names on values.yml). There are also [one manifest example](https://github.com/objetos-aprendizaje/helm-repo/tree/main/extra-manifest-examples/required-secrets.yaml) under extra-manifest-examples folder.
+   For app secrets it is configured in the same way, the system will require the secrets `poa-postgresql-secret`, `poa-admin-appkey-secret`, `poa-web-appkey-secret`, `poa-admin-web-api-key-secret` and `poa-admin-saml2-sp-cert-secret` (unless changed names on values.yml). There are also [one manifest example](https://github.com/objetos-aprendizaje/helm-repo/tree/main/extra-manifest-examples/required-secrets.yaml) under extra-manifest-examples folder.
+
+   For `poa-admin-appkey-secret` and `poa-web-appkey-secret` it needs to be a valid key generated with `php artisan key:generate` that will generate something similar to "base64:X/tI11778LT12XntodYdmSrpbtgh9WNzjmlfxBzu1bw=". In case that you don't want to install the laravel artisan console on your device, if you have a running pod for web or admin project, you can exec the command on these containers that already contains this CLI.
+
+   For `poa-admin-saml2-sp-cert-secret` secret, it is possible to generate a new certificate issuing the following opnenssl commands (requires openssl and some other utilities like base64 and tr in a unix environment):
+   ```bash
+   openssl genpkey -algorithm RSA -out private_key.der -outform DER
+   openssl base64 -in private_key.der -out private_key_base64.txt
+   tr -d '\n' < private_key_base64.txt > private_key_base64_no_newline.txt
+   # For defining at secret in Kubernetes using data field
+   base64 -i private_key_base64_no_newline.txt
+
+   openssl req -new -key private_key.der -out csr.pem -subj "/C=ES/ST=Some-State/L=City/O=Internet Widgits Pty Ltd/OU=IT Department/CN=example.com"
+   openssl x509 -req -in csr.pem -signkey private_key.der -out certificate.der -outform DER -days 365
+   openssl base64 -in certificate.der -out certificate_base64.txt
+   tr -d '\n' < certificate_base64.txt > certificate_base64_no_newline.txt
+   # For defining at secret in Kubernetes using data field
+   base64 -i certificate_base64_no_newline.txt
+   ```
 
 4. **Install Helm Chart:**
 

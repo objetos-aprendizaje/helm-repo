@@ -79,12 +79,20 @@ admin:
   # Used for laravel configuration (seed for tokens, session, etc.)
   # needs to be a valid key generated with "php artisan key:generate" (ex. base64:X/tI11778LT12XntodYdmSrpbtgh9WNzjmlfxBzu1bw=)
   appKeySecret: "poa-admin-appkey-secret"
+  # SAML2 Service Provider cert secret, needs to be in PEM format, recommended to generate a new one with openssl
+  saml2SpCertSecret: "poa-admin-saml2-sp-cert-secret"
+  # Admin web api key, used for communication between admin and web services
+  adminWebApiKeySecret: "poa-admin-web-api-key-secret"
   # Session lifetime in minutes
   sessionLifetime: "120"
+  # Route uri for default fallback image
+  defaultImageRoute: /data/images/default_images/no_image_attached.svg
   # Interface app color configuration
   colorPrimary: "#2C4C7E"
   colorSecondary: "#507AB9"
+  # General error message
   generalErrorMessage: "Ha ocurrido un error"
+  # Password Reset Token expiration in minutes
   pwresTokenExpirationMin: "60"
   # Header for fmnt client cert (needs to be in PEM format)
   fmntCertHeader: "X-Forwarded-Tls-Client-Cert"
@@ -114,6 +122,9 @@ web:
   appKeySecret: "poa-web-appkey-secret"
   # Session lifetime in minutes
   sessionLifetime: "120"
+  # Route uri for default fallback image
+  defaultImageRoute: /images/no_image_attached.svg
+  # Interface app color configuration
   colorPrimary: "#2C4C7E"
   colorSecondary: "#507AB9"
   # Header for fmnt client cert (needs to be in PEM format)

@@ -69,6 +69,17 @@ spec:
               value: "{{ .Values.admin.publicUrl }}"
             - name: FMNT_CERT_HEADER
               value: "{{ .Values.web.fmntCertHeader }}"
+            - name: API_KEY_BACKEND_WEBHOOKS
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.admin.adminWebApiKeySecret }}"
+                  key: api_key
+            - name: DEFAULT_IMAGE_ROUTE
+              value: "{{ .Values.web.defaultImageRoute }}"
+
+            # FIXME: Subject to remove after the implementation of environment selection at app options
+            - name: REDSYS_ACTION_URL
+              value: "https://sis-t.redsys.es:25443/sis/realizarPago"
 
             - name: APP_URL
               value: "{{ .Values.web.publicUrl }}"
@@ -104,6 +115,18 @@ spec:
                   key: password
             - name: DB_PREFIX
               value: "{{ .Values.postgresql.postgresqlTablePrefix }}"
+
+            # Variables without option to configure
+            - name: GOOGLE_REDIRECT_URL
+              value: "${APP_URL}/auth/callback/google"
+            - name: FACEBOOK_REDIRECT_URL
+              value: "${APP_URL}/auth/callback/facebook"
+            - name: TWITTER_REDIRECT_URL
+              value: "${APP_URL}/auth/callback/twitter"
+            - name: LINKEDIN_REDIRECT_URL
+              value: "${APP_URL}/auth/callback/linkedin-openid"
+            - name: DS_MERCHANT_MERCHANTURL
+              value: "${APP_URL}/webhook/process_payment_redsys"
 
           {{/*
           livenessProbe:

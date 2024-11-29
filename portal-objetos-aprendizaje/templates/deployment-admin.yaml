@@ -72,6 +72,27 @@ spec:
             - name: FMNT_CERT_HEADER
               value: "{{ .Values.admin.fmntCertHeader }}"
 
+            - name: API_KEY_FRONT
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.admin.adminWebApiKeySecret }}"
+                  key: api_key
+
+            # Only route uri
+            - name: NO_IMAGE_SELECTED_PATH
+              value: "{{ .Values.admin.defaultImageRoute }}"
+
+            - name: SAML2_SP_CERT_x509
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.admin.saml2SpCertSecret }}"
+                  key: x509
+            - name: SAML2_SP_CERT_PRIVATEKEY
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.admin.saml2SpCertSecret }}"
+                  key: private_key
+
             - name: APP_URL
               value: "{{ .Values.admin.publicUrl }}"
             - name: FRONT_URL
@@ -115,6 +136,20 @@ spec:
               {{- else }}
               value: "{{ .Values.kafka.kafkaHost }}:{{ .Values.kafka.kafkaPort }}"
               {{- end }}
+
+            # Variables without option to configure
+            - name: GOOGLE_REDIRECT_URL
+              value: "${APP_URL}/auth/callback/google"
+            - name: FACEBOOK_REDIRECT_URL
+              value: "${APP_URL}/auth/callback/facebook"
+            - name: TWITTER_REDIRECT_URL
+              value: "${APP_URL}/auth/callback/twitter"
+            - name: LINKEDIN_REDIRECT_URL
+              value: "${APP_URL}/auth/callback/linkedin-openid"
+            - name: SAML2_LOGIN_URL
+              value: "${APP_URL}"
+            - name: SAML2_LOGOUT_URL
+              value: "${APP_URL}/logout"
 
           {{/*
           livenessProbe:
