@@ -67,6 +67,13 @@ spec:
               value: "{{ .Values.web.colorSecondary }}"
             - name: BACKEND_URL
               value: "{{ .Values.admin.publicUrl }}"
+            - name: KEY_CHECK_CERTIFICATE_ACCESS
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.web.fmntSsoKeyCheckHashSaltSecret }}"
+                  key: salt_secret
+            - name: URL_LOGIN_CERT
+              value: "{{ .Values.web.fmntLoginUrl }}"
             - name: FMNT_CERT_HEADER
               value: "{{ .Values.web.fmntCertHeader }}"
             - name: API_KEY_BACKEND_WEBHOOKS

@@ -69,6 +69,13 @@ spec:
               value: "{{ .Values.admin.generalErrorMessage }}"
             - name: PWRES_TOKEN_EXPIRATION_MIN
               value: "{{ .Values.admin.pwresTokenExpirationMin }}"
+            - name: KEY_CHECK_CERTIFICATE_ACCESS
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.web.fmntSsoKeyCheckHashSaltSecret }}"
+                  key: salt_secret
+            - name: URL_LOGIN_CERT
+              value: "{{ .Values.web.fmntLoginUrl }}"
             - name: FMNT_CERT_HEADER
               value: "{{ .Values.admin.fmntCertHeader }}"
 

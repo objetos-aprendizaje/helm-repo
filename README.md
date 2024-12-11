@@ -83,7 +83,7 @@ In order to use FMNT client certificates for authentication you need to setup a 
 
 This request should include a header with client certificate pem content (without begin/end tags nor line breaks), by default the header used is called `X-Forwarded-Tls-Client-Cert` but it can be changed by configuring value `admin.fmntCertHeader`.
 
-There are some manifests examples using traefik in k8s cluster as the edge inbound load balancer to configure client certificate authentication and header pem binding to backend using `X-Forwarded-Tls-Client-Cert` header in the [fmnt-traefik-ingress.yaml](./extra-manifest-examples/fmnt-traefik-ingress.yaml) example file.
+There are some manifests examples using traefik in k8s cluster as the edge inbound load balancer to configure client certificate authentication and header pem binding to backend using `X-Forwarded-Tls-Client-Cert` header in the [fmnt-traefik-ingress.yaml](./extra-manifest-examples/fmnt-traefik-ingress.yaml) example file. The host used for this ingress should match with url setted up at `web.fmntLoginUrl` value option.
 
 ## Minimal System Requirements
 
