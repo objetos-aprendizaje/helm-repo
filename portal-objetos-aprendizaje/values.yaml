@@ -5,6 +5,9 @@
 nameOverride: ""
 fullnameOverride: ""
 
+## Project dependencies (it can be configured to deploy with the chart or connect to external services) ##
+
+# PostgreSQL is a core dependency of the project, serving as the primary database for storing all structured information. It provides a reliable and scalable solution for managing data, ensuring consistency and performance. The dependency can be deployed alongside the project chart or configured to connect to an external PostgreSQL instance, offering flexibility to adapt to different environments and infrastructure setups.
 postgresql:
   # Determine if this resource should be created by helm app
   enabled: true
@@ -34,6 +37,7 @@ postgresql:
   postgresqlHostSecret: "poa-postgresql-secret"
   postgresqlPort: 5432
 
+# Kafka is a key dependency of the project, acting as the central messaging system for managing platform output events. It enables reliable, high-throughput, and scalable event streaming, ensuring seamless communication between components and efficient processing of event data. The dependency can be deployed alongside the project chart or configured to connect to an external Kafka instance, providing flexibility to integrate with various environments and infrastructure setups.
 kafka:
   # Determine if this resource should be created by helm app
   enabled: true
@@ -53,6 +57,8 @@ kafka:
     # requests:
     #   cpu: 100m
     #   memory: 128Mi
+
+  # Zookeeper is a supporting dependency of the project, required only when the Kafka chart deployment is enabled. It acts as a coordination service for Kafka, managing broker metadata, leader election, and maintaining the overall cluster state. Zookeeper ensures the reliability and consistency of the Kafka deployment, but it is not needed when connecting to an external Kafka instance, providing flexibility based on the chosen deployment strategy.
   zookeeper:
     # Customize service docker image used (image, tag, pullPolicy, pullSecrets)
     image:
@@ -73,6 +79,10 @@ kafka:
   kafkaHost: "override-kafka.host"
   kafkaPort: 9092
 
+
+## Project deployment configurations (required to be deployed with chart) ##
+
+# Admin is the main interface for managing the platform, providing a user-friendly dashboard for content creation, curation, and administration. It serves as the primary tool for managing the platform's content and user interactions, ensuring a seamless and efficient experience for all users.
 admin:
   # PublicURL is used for url generation and ingress if enabled togheter to parametrization of service
   publicUrl: "https://portal-objetos-aprendizaje-admin.k8s.local"
@@ -114,6 +124,8 @@ admin:
     # requests:
     #   cpu: 100m
     #   memory: 128Mi
+
+# The web interface is the main access point to the platform’s content, providing an intuitive and user-friendly experience for browsing, searching, and interacting with resources. It acts as the primary tool for users to explore and consume content efficiently and seamlessly.
 web:
   # PublicURL is used for url generation and ingress if enabled togheter to parametrization of service
   publicUrl: "https://portal-objetos-aprendizaje-web.k8s.local"
@@ -149,10 +161,6 @@ web:
     #   cpu: 100m
     #   memory: 128Mi
 
-service:
-  type: ClusterIP
-  port: 80
-
 # Create Ingress resources from chart installation. This is optional, it's also possible to disable and use your own Ingress controller.
 ingress:
   # Determine if this resource should be created by helm app
@@ -177,10 +185,14 @@ ingress:
 
 
 
-
 ## ----- ##
 ## Other optional configurations and advanced features. Not required for app usage ##
 ## ----- ##
+
+# Generic service configuration for all services deployed by this chart
+service:
+  type: ClusterIP
+  port: 80
 
 replicaCount: 1
 # NOTE: HorizontalPodAutoscaler is not supported unless php session is stored in a shared storage
