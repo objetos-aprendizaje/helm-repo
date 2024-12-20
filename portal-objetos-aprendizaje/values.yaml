@@ -135,7 +135,7 @@ web:
   fmntCertHeader: "X-Forwarded-Tls-Client-Cert"
   # Customize service docker image used (image, tag, pullPolicy, pullSecrets)
   image:
-    tag: "0.2.0"
+    tag: "0.3.0"
     repository: ghcr.io/objetos-aprendizaje/portal-web
     pullPolicy: Always
     pullSecrets: []
