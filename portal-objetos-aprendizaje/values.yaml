@@ -17,7 +17,7 @@ postgresql:
   postgresqlDatabase: "portal-objetos-aprendizaje"
   postgresqlTablePrefix: "qvkei_"
   # If postgresql deployment is enabled
-  existingPVClaim: "pvc-portable-objetos-aprendizaje-postgresql"
+  existingPVClaim: "pvc-portal-objetos-aprendizaje-postgresql"
   # Customize service docker image used (image, tag, pullPolicy, pullSecrets)
   image:
     tag: "pg17"
@@ -107,8 +107,8 @@ admin:
   # Header for fmnt client cert (needs to be in PEM format)
   fmntCertHeader: "X-Forwarded-Tls-Client-Cert"
   # Persistent volume claims names for service
-  existingPVClaimPublic: "pvc-portable-objetos-aprendizaje-admin-public"
-  existingPVClaimProtected: "pvc-portable-objetos-aprendizaje-admin-protected"
+  existingPVClaimPublic: "pvc-portal-objetos-aprendizaje-admin-public"
+  existingPVClaimProtected: "pvc-portal-objetos-aprendizaje-admin-protected"
   # Customize service docker image used (image, tag, pullPolicy, pullSecrets)
   image:
     tag: "latest"

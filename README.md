@@ -19,7 +19,7 @@
 3. **Create persistent volumes and secrets:**
 
    You must create persistent volumes and volume claims for persistent data in the installation, there are two required volumes by this application for public and protected data uploads. You can customize the persistent volume claim name by modifying chart values (keys `admin.existingPVClaimPublic` and `admin.existingPVClaimProtected`), the default expected pvc names are:
-   `pvc-portable-objetos-aprendizaje-admin-public` and `pvc-portable-objetos-aprendizaje-admin-protected`
+   `pvc-portal-objetos-aprendizaje-admin-public` and `pvc-portal-objetos-aprendizaje-admin-protected`
 
    By default this chart is going to deploy a postgresql installation aswell (unless disabling with `postgresql.enabled` key and configuring `postgresql.postgresqlHost` and `postgresql.postgresqlPort` keys) and their default expected pvc name is `postgresql.existingPVClaim`. In case that do you use an external postgresql instance, it is required that [pg_vector](https://github.com/pgvector/pgvector) extension is enabled.
 
