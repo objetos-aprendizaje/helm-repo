@@ -77,6 +77,21 @@
 
    In case that do you want to load demo data into the platform you should start a exec session on portal-objetos-aprendizaje-admin pod and execute `php artisan db:seed`.
 
+   5.1. **Access to non HTTP services deployed by helm chart**
+
+      Both Kafka and PostgreSQL are services that can be optionally deployed using this chart or configuring the app to use external services already deployed. In case that they are deployed by using this helm chart internal services access is configured automatically through k8s services. In case that you want to expose them you should point external traffic to k8s service traffic. They are named in the following way (check [_helpers.tpl](./portal-objetos-aprendizaje/templates/_helpers.tpl) file to see how portal-objetos-aprendizaje.fullname is generated):
+
+      - PostgreSQL: `{{ include "portal-objetos-aprendizaje.fullname" . }}-postgresql-service`
+      - Kafka: `{{ include "portal-objetos-aprendizaje.fullname" . }}-kafka-service`
+
+      The procedure to point external traffic to k8s service depends heavily on the k8s cluster deployment type and IngressClasses. Here are some references on how to implement on different scenarions:
+
+      - Amazon EKS: Through Application Load Balancers. https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html
+      - Google Cloud Platform GKS: External Application Load Balancers. https://cloud.google.com/kubernetes-engine/docs/how-to/load-balance-ingress
+      - Traefik: Through IngressRouteTCP (https://doc.traefik.io/traefik/routing/providers/kubernetes-crd/#kind-ingressroutetcp) and dedicated entrypoint (https://doc.traefik.io/traefik/routing/entrypoints/)
+      - Nginx: https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/
+
+
 ## Using FMNT client certificates
 
 In order to use FMNT client certificates for authentication you need to setup a ingress route with higher priority for path `/certificate-access` that requests client certificate on SSL connection and redirect to service `{{ include "portal-objetos-aprendizaje.fullname" . }}-admin-service` (check [_helpers.tpl](./portal-objetos-aprendizaje/templates/_helpers.tpl) file to see how portal-objetos-aprendizaje.fullname is generated).

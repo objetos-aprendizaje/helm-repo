@@ -142,7 +142,7 @@ web:
   # Secret salt key for authorization hash check
   fmntSsoKeyCheckHashSaltSecret: "poa-sso-fmnt-hash-salt-secret"
   # Domain used for fmnt login page (used for client cert validation)
-  fmntLoginUrl: "" # "https://portal-objetos-aprendizaje-cert.k8s.local"
+  fmntLoginUrl: "" # ex. "https://portal-objetos-aprendizaje-cert.k8s.local"
   # Header for fmnt client cert (needs to be in PEM format)
   fmntCertHeader: "X-Forwarded-Tls-Client-Cert"
   # Customize service docker image used (image, tag, pullPolicy, pullSecrets)
