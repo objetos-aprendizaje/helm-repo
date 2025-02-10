@@ -21,7 +21,7 @@
    You must create persistent volumes and volume claims for persistent data in the installation, there are two required volumes by this application for public and protected data uploads. You can customize the persistent volume claim name by modifying chart values (keys `admin.existingPVClaimPublic` and `admin.existingPVClaimProtected`), the default expected pvc names are:
    `pvc-portal-objetos-aprendizaje-admin-public` and `pvc-portal-objetos-aprendizaje-admin-protected`
 
-   By default this chart is going to deploy a postgresql installation aswell (unless disabling with `postgresql.enabled` key and configuring `postgresql.postgresqlHost` and `postgresql.postgresqlPort` keys) and their default expected pvc name is `postgresql.existingPVClaim`. In case that do you use an external postgresql instance, it is required that [pg_vector](https://github.com/pgvector/pgvector) extension is enabled.
+   By default this chart is going to deploy a postgresql installation aswell (unless disabling with `postgresql.enabled` key and configuring `postgresql.postgresqlHost` and `postgresql.postgresqlPort` keys) and their default expected pvc name is `postgresql.existingPVClaim`. In case that do you use an external postgresql instance, it is required that [pg_vector](https://github.com/pgvector/pgvector) extension is enabled. This is a requirement of the course recommendation module for storing embeddings.
 
    There are also some manifest examples under [extra-manifest-examples folder](https://github.com/objetos-aprendizaje/helm-repo/tree/main/extra-manifest-examples) at this chart repository. Note that they are illustrative and using hostpath /tmp folder, so this is not intended to be used for production.
 
